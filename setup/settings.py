@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path, os
+from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
+
 
 # Application definition
 
@@ -38,6 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tech',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'django.contrib.sites'
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -117,8 +131,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'templates/static')
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'APP': {
+            'client_id': str(os.getenv('CLIENT_ID_GITHUB')),
+            'secret': str(os.getenv('CLIENT_SECRET_GITHUB')),
+            'key': ''
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = '/members'
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+ACCOUNT_LOGOUT_ON_GET = True
+
+LOGOUT_REDIRECT_URL = "/"
