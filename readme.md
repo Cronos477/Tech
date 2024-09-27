@@ -37,3 +37,10 @@ python manage.py runserver
 ```
 
 Acesse http://127.0.0.1:8000 no seu navegador.
+
+## 📸 Screenshots
+
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
